@@ -1,0 +1,79 @@
+----User Says Start----
+User Says: hello world
+----User Says End----
+
+-----Considered Intents Start----
+Considered Intents: [
+  {
+    "name": "<LaunchRequest>"
+  }
+]
+-----Considered Intents End----
+
+----Json Input Start----
+Json Input: {
+  "version": "1.0",
+  "session": {
+    "new": true,
+    "sessionId": "amzn1.echo-api.session.fb881ffd-b744-4ae5-9070-066310f7e63f",
+    "application": {
+      "applicationId": "amzn1.ask.skill.101f3e57-9925-48b8-bfac-90f70e9991d3"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.AE7GHQOPU25NED3TCSR6TX3BKWYDNLZ4UFHVL6MH4SWV7YBWY5LFAIIJ4Y3IALCPOUMPAFPZTZS4MP2YISQSIXHUUYAZG2IYEIYH32YIDAN7ZG3PJY43FH3BKYH56S6F5XHDMVNLWUNDLXBBJEZ34GQOPE2SPSVX4XYNVBTDHNP2VRRSZCJPDRIBJFLCG2WGYPZX4ECV5WPNP3Q"
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.101f3e57-9925-48b8-bfac-90f70e9991d3"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.AE7GHQOPU25NED3TCSR6TX3BKWYDNLZ4UFHVL6MH4SWV7YBWY5LFAIIJ4Y3IALCPOUMPAFPZTZS4MP2YISQSIXHUUYAZG2IYEIYH32YIDAN7ZG3PJY43FH3BKYH56S6F5XHDMVNLWUNDLXBBJEZ34GQOPE2SPSVX4XYNVBTDHNP2VRRSZCJPDRIBJFLCG2WGYPZX4ECV5WPNP3Q"
+      },
+      "device": {
+        "deviceId": "amzn1.ask.device.AGGI37HLYWOHV72JC5A4MXBHVHXOBN4FFEGN5RDQCL67PZ3LPH22RBOAEMWEYY6EFSM7ZWRXVTGVUJJLBG6Z6N2ANNH6KH277BLNHFARV4KJ327LEZY3TSSZG55FVGN3CY5J6EFIOCXTSTSHDUAGIZBA4A35NJ5QO2CYGXFADEI2VU7RKDENU",
+        "supportedInterfaces": {}
+      },
+      "apiEndpoint": "https://api.amazonalexa.com",
+      "apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJhdWQiOiJodHRwczovL2FwaS5hbWF6b25hbGV4YS5jb20iLCJpc3MiOiJBbGV4YVNraWxsS2l0Iiwic3ViIjoiYW16bjEuYXNrLnNraWxsLjEwMWYzZTU3LTk5MjUtNDhiOC1iZmFjLTkwZjcwZTk5OTFkMyIsImV4cCI6MTU1NDA2NDI0OCwiaWF0IjoxNTU0MDYzOTQ4LCJuYmYiOjE1NTQwNjM5NDgsInByaXZhdGVDbGFpbXMiOnsiY29uc2VudFRva2VuIjpudWxsLCJkZXZpY2VJZCI6ImFtem4xLmFzay5kZXZpY2UuQUdHSTM3SExZV09IVjcySkM1QTRNWEJIVkhYT0JONEZGRUdONVJEUUNMNjdQWjNMUEgyMlJCT0FFTVdFWVk2RUZTTTdaV1JYVlRHVlVKSkxCRzZaNk4yQU5OSDZLSDI3N0JMTkhGQVJWNEtKMzI3TEVaWTNUU1NaRzU1RlZHTjNDWTVKNkVGSU9DWFRTVFNIRFVBR0laQkE0QTM1Tko1UU8yQ1lHWEZBREVJMlZVN1JLREVOVSIsInVzZXJJZCI6ImFtem4xLmFzay5hY2NvdW50LkFFN0dIUU9QVTI1TkVEM1RDU1I2VFgzQktXWUROTFo0VUZIVkw2TUg0U1dWN1lCV1k1TEZBSUlKNFkzSUFMQ1BPVU1QQUZQWlRaUzRNUDJZSVNRU0lYSFVVWUFaRzJJWUVJWUgzMllJREFON1pHM1BKWTQzRkgzQktZSDU2UzZGNVhIRE1WTkxXVU5ETFhCQkpFWjM0R1FPUEUyU1BTVlg0WFlOVkJUREhOUDJWUlJTWkNKUERSSUJKRkxDRzJXR1lQWlg0RUNWNVdQTlAzUSJ9fQ.J3nBM8ydaecjWTE2xnUXz-0oss2j27fOUwYrpZophsJCrs53ukFZCaHPQTqO-4MDUqZhRYx5sCAjuDDynMLAiem7Rh5MpnaTvmOKrMSJcoVyrc95n0Z2NwoSMqTlJXmEaCIeRIYgk70p3TuoFiNn-yUkGMB_JUZLM6XU3PR0uYhN30mvbcZF9JhcztTsPFIagvlbDkqVMiWQuPw_wZOO-hJdD4lj7PlUqrBNJDOxZt3SvP2KRa5vMDPZRS4wV-i1yZwjqJ09705QGn7vtGKsvM6Un0PLp6nuCNFok7Mi5Hjy5-1skmi4MpkyxlQwekt8v_O7wcPhTRnk-isuIjE8PQ"
+    }
+  },
+  "request": {
+    "type": "LaunchRequest",
+    "requestId": "amzn1.echo-api.request.b5f13db6-f880-4c65-905a-b460c1c1de7f",
+    "timestamp": "2019-03-31T20:25:48Z",
+    "locale": "en-US",
+    "shouldLinkResultBeReturned": false
+  }
+}
+----Json Input End----
+
+----Json Output Start----
+Json Output: {
+  "body": {
+    "version": "1.0",
+    "response": {
+      "outputSpeech": {
+        "type": "SSML",
+        "ssml": "<speak>Hello friend. I am Alexa, ask me an unknown word and I explain you the meaning of it.</speak>"
+      },
+      "reprompt": {
+        "outputSpeech": {
+          "type": "SSML",
+          "ssml": "<speak>Hello friend. I am Alexa, ask me an unknown word and I explain you the meaning of it.</speak>"
+        }
+      },
+      "shouldEndSession": false,
+      "type": "_DEFAULT_RESPONSE"
+    },
+    "sessionAttributes": {},
+    "userAgent": "ask-node/2.5.1 Node/v8.10.0"
+  }
+}
+----Json Output End----
+
+----Alexa Responds Start----
+Alexa Responds: Hello friend. I am Alexa, ask me an unknown word and I explain you the meaning of it.
+----Alexa Responds End----
+
