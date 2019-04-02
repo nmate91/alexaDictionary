@@ -25,7 +25,7 @@ const addAll = items => {
             //get the first 20, dynamodb has its limits
             .slice(0, 20)
             //filter data, to make sure it has id
-            .filter(item => item.hasOwnProperty('i  '))
+            .filter(item => item.hasOwnProperty('id'))
             //maps promises into one array, which going to be resolved in one time
             .map(item => {
                 //add each item, and return a promise
