@@ -4,6 +4,7 @@
 const Alexa = require('ask-sdk-core');
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient({ region: 'us-east-1' });
+const Dictionary = require('oxford-dictionary-api');
 
 require('request');
 const request = require('request-promise');
@@ -24,7 +25,7 @@ const addAll = items => {
             //get the first 20, dynamodb has its limits
             .slice(0, 20)
             //filter data, to make sure it has id
-            .filter(item => item.hasOwnProperty('id'))
+            .filter(item => item.hasOwnProperty('i  '))
             //maps promises into one array, which going to be resolved in one time
             .map(item => {
                 //add each item, and return a promise
@@ -56,10 +57,22 @@ const addOne = item => {
 
 const get = () => {
     return new Promise((resolve, reject) => {
-        const params = {
-            TableName: 'Dictionary',
-        };
-        docClient.query(params, (err, data) => {
+        // const params = {
+        //     TableName: 'Dictionary',
+        // };
+        // docClient.query(params, (err, data) => {
+        //     if (err) {
+        //         console.error(
+        //             'Unable to read item. Error JSON:',
+        //             JSON.stringify(err, null, 2)
+        //         );
+        //         return reject(JSON.stringify(err, null, 2));
+        //     }
+        //     console.log('GetItem succeeded:', JSON.stringify(data, null, 2));
+        //     resolve(data.Items);
+        // });
+        const dict = new Dictionary(app_id, app_key);
+        dict.find('ace', function(err, data) {
             if (err) {
                 console.error(
                     'Unable to read item. Error JSON:',
@@ -68,7 +81,7 @@ const get = () => {
                 return reject(JSON.stringify(err, null, 2));
             }
             console.log('GetItem succeeded:', JSON.stringify(data, null, 2));
-            resolve(data.Items);
+            resolve(data.results);
         });
     });
 };
