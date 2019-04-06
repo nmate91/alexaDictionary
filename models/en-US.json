@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "hello world",
+      "invocationName": "hello there",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -16,9 +16,31 @@
           "samples": []
         },
         {
-          "name": "HelloWorldIntent",
+          "name": "WordFinderIntent",
+          "slots": [
+            {
+              "name": "Word",
+              "type": "LIST_OF_WORDS"
+            }
+          ],
           "samples": [
-            "hello"
+            "What does {Word} mean"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        }
+      ],
+      "types": [
+        {
+          "name": "LIST_OF_WORDS",
+          "values": [
+            {
+              "name": {
+                "value": "test"
+              }
+            }
           ]
         }
       ]

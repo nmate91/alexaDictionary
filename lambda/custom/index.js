@@ -4,34 +4,43 @@
 const Alexa = require('ask-sdk-core');
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient({ region: 'us-east-1' });
-const Dictionary = require('oxford-dictionary-api');
 
 require('request');
 const request = require('request-promise');
 
-const app_key = 'e924ba24525f6c231fbfeba62ce965ca';
-const app_id = 'b0691462';
-const oxfordURL = 'https://oed-api.oxforddictionaries.com/oed/api/v0.1/words/';
+const app_key = 'f1127995c4059c40b1461b9a1919406b';
+const app_id = 'f0a564c4';
+const oxfordURL = 'https://od-api.oxforddictionaries.com:443/api/v1/';
 const header = {
     Accept:
         'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
     app_id: app_id,
     app_key: app_key,
 };
+const source_lang = 'en';
 
-const addAll = items => {
-    return Promise.all(
-        items
-            //get the first 20, dynamodb has its limits
-            .slice(0, 20)
-            //filter data, to make sure it has id
-            .filter(item => item.hasOwnProperty('id'))
-            //maps promises into one array, which going to be resolved in one time
-            .map(item => {
-                //add each item, and return a promise
-                return addOne(item);
-            })
-    );
+const getDefinitionFromDb = word => {
+    return new Promise((resolve, reject) => {
+        console.log(`Searching in db for ${word}`);
+        const params = {
+            TableName: 'Dictionary',
+            Key: {
+                'lemma': word
+            },
+        };
+        docClient.get(params, (err, result) => {
+            if(err) reject(err);
+            if(!result.hasOwnProperty('Item')) {
+                console.log(`${word} not found in db.`);
+                resolve(null);
+            }
+            else {
+                console.log(`${word} found in db.`);
+                console.log(result);
+                resolve(result.Item.definition);
+            }
+        })
+    })
 };
 
 //add one item to db, must have an id
@@ -55,34 +64,29 @@ const addOne = item => {
     });
 };
 
-const get = () => {
+const get = (word) => {
     return new Promise((resolve, reject) => {
-        // const params = {
-        //     TableName: 'Dictionary',
-        // };
-        // docClient.query(params, (err, data) => {
-        //     if (err) {
-        //         console.error(
-        //             'Unable to read item. Error JSON:',
-        //             JSON.stringify(err, null, 2)
-        //         );
-        //         return reject(JSON.stringify(err, null, 2));
-        //     }
-        //     console.log('GetItem succeeded:', JSON.stringify(data, null, 2));
-        //     resolve(data.Items);
-        // });
-        const dict = new Dictionary(app_id, app_key);
-        dict.find('ace', function(err, data) {
-            if (err) {
+        word = word.toLowerCase();
+        const docs = request({
+            method: 'GET',
+            uri: oxfordURL + `entries/${source_lang}/${word}:`,
+            json: true,
+            headers: header,
+        });
+
+        docs
+            .then(async function(dictionary) {
+                let definition = dictionary.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0];
+                console.log(`Definition is: ${definition}`);
+                resolve(definition);
+            })
+            .catch(function(err) {
                 console.error(
                     'Unable to read item. Error JSON:',
-                    JSON.stringify(err, null, 2)
+                    JSON.stringify(err)
                 );
-                return reject(JSON.stringify(err, null, 2));
-            }
-            console.log('GetItem succeeded:', JSON.stringify(data, null, 2));
-            resolve(data.results);
-        });
+                reject(err);
+            });
     });
 };
 
@@ -91,28 +95,9 @@ const LaunchRequestHandler = {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     async handle(handlerInput) {
-        //get the oxford api data
-        const docs = request({
-            method: 'GET',
-            uri: oxfordURL,
-            port: 443,
-            json: true,
-            headers: header,
-        });
-
-        await docs
-            .then(async function(dictionary) {
-                console.log('adding one');
-                //we only need the data array
-                return await addAll(dictionary.data);
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
-
         //say something after everything is succeeded
         const speechText =
-            'Hello friend. I am Alexa, ask me an unknown word and I explain you the meaning of it.';
+            'Hello friend. I am Alexa, ask me an unknown word and I explain you the meaning of it. You can ask it by saying: What does something mean?';
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt(speechText)
@@ -120,21 +105,31 @@ const LaunchRequestHandler = {
     },
 };
 
-const HelloWorldIntentHandler = {
+const WordFinderIntentHandler = {
     canHandle(handlerInput) {
         return (
             handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
             handlerInput.requestEnvelope.request.intent.name ===
-                'HelloWorldIntent'
+                'WordFinderIntent'
         );
     },
     async handle(handlerInput) {
-        const speechText = 'Not implemented yet'; //await get();
-        //console.log('success');
+        const keyword = handlerInput.requestEnvelope.request.intent.slots.Word.value;
+        let definition = await getDefinitionFromDb(keyword);
+        console.log(definition);
+        if(!definition) {
+            definition = await get(keyword);
+            console.log(definition);
+            await addOne({
+                lemma: keyword,
+                definition: definition
+            });
+        }
+        console.log(`Definition: ${definition}`);
         return (
             handlerInput.responseBuilder
-                .speak(speechText)
-                //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+                .speak(definition)
+                .reprompt('Next?')
                 .getResponse()
         );
     },
@@ -196,19 +191,29 @@ const SessionEndedRequestHandler = {
     },
 };
 
-const ErrorHandler = {
+const NotFoundWordHandler = {
     canHandle() {
         return true;
     },
-    handle(handlerInput, error) {
-        console.log(`Error handled: ${error.message}`);
-
-        return handlerInput.responseBuilder
-            .speak("Sorry, I can't understand the command. Please say again.")
-            .reprompt(
-                "Sorry, I can't understand the command. Please say again."
-            )
-            .getResponse();
+    async handle(handlerInput, error) {
+        const keyword = handlerInput.requestEnvelope.request.intent.slots.Word.value;
+        let definition = await getDefinitionFromDb(keyword);
+        console.log(definition);
+        if(!definition) {
+            definition = await get(keyword);
+            console.log(definition);
+            await addOne({
+                lemma: keyword,
+                definition: definition
+            });
+        }
+        console.log(`Intent name: ${definition}`);
+        return (
+            handlerInput.responseBuilder
+                .speak(definition || 'Cannot find result.')
+                .reprompt('Next word')
+                .getResponse()
+        );
     },
 };
 
@@ -217,10 +222,10 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 exports.handler = skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
-        HelloWorldIntentHandler,
+        WordFinderIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler
     )
-    .addErrorHandlers(ErrorHandler)
+    .addErrorHandlers(NotFoundWordHandler)
     .lambda();

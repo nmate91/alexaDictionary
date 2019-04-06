@@ -6,11 +6,11 @@
       "merge": {},
       "resources": {
         "manifest": {
-          "eTag": "7347afc4bc7b062e0c2193e5dc1fb4dc"
+          "eTag": "5d7a849ae034768a27a97f238cc101ac"
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "ba4513016605e189b35d1916b113167c"
+            "eTag": "dd4bd6056990bd7a4e05c73029ea7390"
           }
         },
         "lambda": [
@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "ask-custom-dictionary-default",
             "handler": "index.handler",
-            "revisionId": "62da27ec-8bf7-4c5d-b3ba-d0e55bc4dda3",
+            "revisionId": "d4726519-a8b4-45f1-85e4-4297a038ce96",
             "runtime": "nodejs8.10"
           }
         ]
