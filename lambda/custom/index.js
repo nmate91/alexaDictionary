@@ -18,12 +18,13 @@ const header = {
     app_key: app_key,
 };
 const source_lang = 'en';
+const TABLE_NAME = 'Dictionary';
 
 const getDefinitionFromDb = word => {
     return new Promise((resolve, reject) => {
         console.log(`Searching in db for ${word}`);
         const params = {
-            TableName: 'Dictionary',
+            TableName: TABLE_NAME,
             Key: {
                 'lemma': word
             },
@@ -44,12 +45,12 @@ const getDefinitionFromDb = word => {
 };
 
 //add one item to db, must have an id
-const addOne = item => {
+const addDefinitionToDb = item => {
     return new Promise((resolve, reject) => {
         console.log(item);
         //params must have a TableName and an Item key
         const params = {
-            TableName: 'Dictionary',
+            TableName: TABLE_NAME,
             Item: item,
         };
         docClient.put(params, (err, data) => {
@@ -64,7 +65,7 @@ const addOne = item => {
     });
 };
 
-const get = (word) => {
+const getWordFromOxfordApi = (word) => {
     return new Promise((resolve, reject) => {
         word = word.toLowerCase();
         const docs = request({
@@ -118,9 +119,9 @@ const WordFinderIntentHandler = {
         let definition = await getDefinitionFromDb(keyword);
         console.log(definition);
         if(!definition) {
-            definition = await get(keyword);
+            definition = await getWordFromOxfordApi(keyword);
             console.log(definition);
-            await addOne({
+            await addDefinitionToDb({
                 lemma: keyword,
                 definition: definition
             });
@@ -200,9 +201,9 @@ const NotFoundWordHandler = {
         let definition = await getDefinitionFromDb(keyword);
         console.log(definition);
         if(!definition) {
-            definition = await get(keyword);
+            definition = await getWordFromOxfordApi(keyword);
             console.log(definition);
-            await addOne({
+            await addDefinitionToDb({
                 lemma: keyword,
                 definition: definition
             });
